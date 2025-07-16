@@ -1,4 +1,4 @@
 ### Get Jira issue status
 GET https://bright-inventions.atlassian.net//rest/api/2/issue/BA-1
-Authorization: Basic a2Fyb2wucmluY0BicmlnaHRpbnZlbnRpb25zLnBsOkFUQVRUM3hGZkdGMDg0ZWwyeFltZ3FZZEx1WlVRdURlMWUxSDR2OTR3WldacXF1YjVqREpwUWZJR2o5NzE4NGtnTFNNT1g4ZlRjWHlTRlUyTW0xV0ZVOThkRHdkX0RveDUzX2tNakUwdTQxeXZyUnl4N2k5ODZSaVVPT3BwNG9WS2lfWi1Wa196cWV6YXlKLUpiRjhva3VFRDVaY2FvOEtpVTFoVjZJS0xDUEpTNDhueW1TdlNjcz00NDVFRDYyQg==
+Authorization: Basic {{token}}
 Accept: application/json
