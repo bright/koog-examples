@@ -2,6 +2,7 @@ package pl.brightinventions.koog
 
 import ai.koog.agents.core.agent.AIAgent
 import ai.koog.agents.core.tools.ToolRegistry
+import ai.koog.agents.core.tools.reflect.asTools
 import ai.koog.prompt.executor.clients.openai.OpenAIModels
 import ai.koog.prompt.executor.llms.all.simpleOpenAIExecutor
 import io.ktor.client.HttpClient
@@ -25,6 +26,20 @@ fun main() {
             )
         }
     }
+    val ticketUpdateToolSet = TicketUpdateToolSet(
+        jiraApi = JiraApiClient(
+            httpClient = httpClient,
+            properties = JiraApiProperties(
+                token = System.getenv("JIRA_TOKEN")
+            )
+        ),
+        slackApi = SlackApiClient(
+            httpClient = httpClient,
+            properties = SlackProperties(
+                token = System.getenv("SLACK_TOKEN")
+            )
+        )
+    )
     val agent = AIAgent(
         executor = simpleOpenAIExecutor(System.getenv("OPENAI_API_KEY")),
         systemPrompt = """
@@ -33,27 +48,7 @@ fun main() {
     """.trimIndent(),
         llmModel = OpenAIModels.Chat.GPT4o,
         toolRegistry = ToolRegistry {
-            tool(
-                JiraTool(
-                    JiraApiClient(
-                        httpClient = httpClient,
-                        properties = JiraApiProperties(
-                            token = System.getenv("JIRA_TOKEN")
-                        )
-                    )
-                )
-            )
-
-            tool(
-                SlackTool(
-                    slackApi = SlackApiClient(
-                        httpClient = httpClient,
-                        properties = SlackProperties(
-                            token = System.getenv("SLACK_TOKEN")
-                        )
-                    )
-                )
-            )
+            tools(ticketUpdateToolSet.asTools())
         },
     )
 
