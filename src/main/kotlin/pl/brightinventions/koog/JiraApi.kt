@@ -8,7 +8,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import kotlinx.serialization.Serializable
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 interface JiraApi {
@@ -29,7 +28,7 @@ class JiraApiClient(
                 path("/rest/api/2/issue/$ticketKey")
             }
 
-            header(HttpHeaders.Authorization, Base64.encode("${properties.email}:${properties.token}".toByteArray()))
+            header(HttpHeaders.Authorization, "Basic ${properties.token}")
         }
             .call
             .body<JiraIssue>()
@@ -54,6 +53,5 @@ data class JiraIssue(
 }
 
 data class JiraApiProperties(
-    val email: String,
     val token: String,
 )

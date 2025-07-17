@@ -6,7 +6,6 @@ import ai.koog.agents.core.tools.ToolParameterDescriptor
 import ai.koog.agents.core.tools.ToolParameterType
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 
 class JiraTool(val jiraApi: JiraApi) : SimpleTool<JiraTool.JiraToolArgs>() {
 

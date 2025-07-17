@@ -5,15 +5,26 @@ import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.prompt.executor.clients.openai.OpenAIModels
 import ai.koog.prompt.executor.llms.all.simpleOpenAIExecutor
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
 
-    val httpClient = HttpClient()
+    val httpClient = HttpClient {
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    prettyPrint = true
+                }
+            )
+        }
+    }
     val agent = AIAgent(
         executor = simpleOpenAIExecutor(System.getenv("OPENAI_API_KEY")),
         systemPrompt = """
@@ -27,7 +38,6 @@ fun main() {
                     JiraApiClient(
                         httpClient = httpClient,
                         properties = JiraApiProperties(
-                            email = System.getenv("JIRA_EMAIL"),
                             token = System.getenv("JIRA_TOKEN")
                         )
                     )
@@ -47,10 +57,9 @@ fun main() {
         },
     )
 
-    val command = "Update the team: What’s the status of BA-1 ticket? Post it to #dev-updates in Slack."
+    val command = "Update the team: What’s the status of BA-1 ticket? Post it to #koog-test in Slack."
 
     runBlocking {
-        val result = agent.run(command)
-        println(result)
+        agent.run(command)
     }
 }
