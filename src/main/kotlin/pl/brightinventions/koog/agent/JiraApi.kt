@@ -1,4 +1,4 @@
-package pl.brightinventions.koog
+package pl.brightinventions.koog.agent
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
