@@ -1,4 +1,4 @@
-package pl.brightinventions.koog
+package pl.brightinventions.koog.agent
 
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool
